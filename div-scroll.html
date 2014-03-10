@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Async div scroll test </title>
+    <meta name="viewport" content="user-scalable=no">
+    <script>
+     window.onload = function() {
+       var rafEnabled = true;
+       var fake = document.getElementById("fake-scroll");
+       var toggle_raf_button = document.getElementById("button");
+       var animationFrameId = 0;
+       var scrollable = document.getElementById("scrollable");
+
+
+       var updateLocation = function() {
+         fake.style.webkitTransform = 'translate3d(0, ' + (-scrollable.scrollTop) + 'px, 0)';
+       }
+
+       toggle_raf_button.addEventListener("click", function() {
+         if (rafEnabled) {
+           cancelAnimationFrame(animationFrameId);
+           scrollable.addEventListener("scroll", updateLocation);
+         } else {
+           scrollable.removeEventListener("scroll", updateLocation);
+           animationFrameId = requestAnimationFrame(onAnimationFrame);
+         }
+         rafEnabled = !rafEnabled;
+         toggle_raf_button.innerHTML = rafEnabled ? "Disable RAF" : "Use RAF";
+       });
+
+       var onAnimationFrame = function() {
+         updateLocation();
+         animationFrameId = requestAnimationFrame(onAnimationFrame);
+       }
+       animationFrameId = requestAnimationFrame(onAnimationFrame);
+     }
+    </script>
+    <style>
+     * {
+       margin:0;
+       padding:0;
+     }
+
+     button {
+       position:absolute;
+     }
+
+     div {
+       width:500px;
+       height:500px;
+     }
+
+     #real-scroll {
+       position:relative;
+       background-color:red;
+       margin-top:250px;
+     }
+     #fake-scroll {
+       margin-top:250px;
+       position:fixed;
+       top:0px;
+       left:500px;
+       background-color:green;
+     }
+
+     #scrollable {
+       height:1000px;
+       overflow:scroll;
+     }
+
+     #container {
+       height:2500px;
+     }
+
+    </style>
+  </head>
+  <body>
+    <button id="button">Disable RAF</button>
+    <div id="scrollable">
+      <div id="container">
+        <div id="real-scroll"></div>
+      </div>
+    </div>
+    <div id="fake-scroll"></div>
+  </body>
+</html>
