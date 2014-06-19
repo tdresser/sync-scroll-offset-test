@@ -9,7 +9,9 @@
        var animationFrameId = 0;
 
        var updateLocation = function() {
-         fake.style.webkitTransform = 'translate3d(0, ' + (-document.body.scrollTop) + 'px, 0)';
+         var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+         fake.style.webkitTransform = 'translate3d(0, ' + (-scrollTop) + 'px, 0)';
+         fake.style.transform = 'translate3d(0, ' + (-scrollTop) + 'px, 0)';
        }
 
        document.addEventListener("scroll", updateLocation);
