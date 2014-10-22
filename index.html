@@ -5,7 +5,7 @@
     <title> Async scroll test </title>
     <script>
      window.onload = function() {
-       var rafEnabled = true;
+       var rafEnabled = false;
        var fake = document.getElementById("fake-scroll");
        var toggle_raf_button = document.getElementById("button");
        var animationFrameId = 0;
@@ -25,14 +25,14 @@
            animationFrameId = requestAnimationFrame(onAnimationFrame);
          }
          rafEnabled = !rafEnabled;
-         toggle_raf_button.innerHTML = rafEnabled ? "Disable RAF" : "Use RAF";
+         toggle_raf_button.innerHTML = rafEnabled ? "Don't use RAF" : "Use RAF";
        });
 
        var onAnimationFrame = function() {
          updateLocation();
          animationFrameId = requestAnimationFrame(onAnimationFrame);
        }
-       animationFrameId = requestAnimationFrame(onAnimationFrame);
+       document.addEventListener("scroll", updateLocation);
      }
     </script>
     <style>
@@ -64,7 +64,7 @@
     </style>
   </head>
   <body>
-    <button id="button">Disable RAF</button>
+    <button id="button">Use RAF</button>
     <div id="real-scroll"></div>
     <div id="fake-scroll"></div>
   </body>
