@@ -7,40 +7,43 @@
      window.onload = function() {
        var rafEnabled = false;
        var fake = document.getElementById("fake-scroll");
-       var toggle_raf_button = document.getElementById("button");
+//       var toggle_raf_button = document.getElementById("button");
        var animationFrameId = 0;
        var scrollable = document.getElementById("scrollable");
 
        var updateLocation = function() {
-         console.log("SCROLL");
-         var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+         var scrollTop = scrollable.scrollTop;
          fake.style.webkitTransform = 'translate3d(0, ' + (-scrollTop) + 'px, 0)';
          fake.style.transform = 'translate3d(0, ' + (-scrollTop) + 'px, 0)';
        }
 
-       toggle_raf_button.addEventListener("click", function() {
+/*       toggle_raf_button.addEventListener("click", function() {
          if (rafEnabled) {
            cancelAnimationFrame(animationFrameId);
-           window.addEventListener("scroll", updateLocation);
+           scrollable.addEventListener("scroll", updateLocation);
          } else {
-           window.removeEventListener("scroll", updateLocation);
+           scrollable.removeEventListener("scroll", updateLocation);
            animationFrameId = requestAnimationFrame(onAnimationFrame);
          }
          rafEnabled = !rafEnabled;
          toggle_raf_button.innerHTML = rafEnabled ? "Don't use RAF" : "Use RAF";
-       });
+       });*/
 
        var onAnimationFrame = function() {
          updateLocation();
          animationFrameId = requestAnimationFrame(onAnimationFrame);
        }
-       window.addEventListener("scroll", updateLocation);
+       scrollable.addEventListener("scroll", updateLocation);
      }
     </script>
     <style>
      * {
        margin:0;
        padding:0;
+     }
+
+     html, body {
+       height:100%;
      }
 
      button {
@@ -54,12 +57,13 @@
 
      #real-scroll {
        position:relative;
-       width:100%;
+       width:50%;
        background-color:red;
        margin-top:250px;
      }
      #fake-scroll {
        width:50%;
+       margin-left:-2%;
        margin-top:250px;
        position:fixed;
        top:0px;
@@ -68,23 +72,22 @@
      }
 
      #scrollable {
-       height:1000px;
-       width:50%;
+       height:100%;
+       width:100%;
        overflow:scroll;
      }
 
-     #container {
+     #prop {
        height:2500px;
      }
     </style>
   </head>
   <body>
     <div id="scrollable">
-      <div id="container">
-        <div id="real-scroll"></div>
-      </div>
+      <div id="real-scroll"></div>
+      <div id="prop"></div>
+      <div id="fake-scroll"></div>
     </div>
-    <div id="fake-scroll"></div>
-    <button id="button">Use RAF</button>
+<!--    <button id="button">Use RAF</button>-->
   </body>
 </html>
